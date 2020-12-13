@@ -80,13 +80,13 @@ CTRunArrayTest >> testAtPut2 [
 CTRunArrayTest >> testCTRunArrayAdjacentMerge [
 	"This demonstrates that adjancent runs with equal attributes are merged."
 
-	| CTRunArray |
-	CTRunArray := CTRunArray new.
-	CTRunArray
+	| array |
+	array := CTRunArray new.
+	array
 		add: TextEmphasis normal withOccurrences: 5;
 		add: TextEmphasis bold withOccurrences: 5;
 		add: TextEmphasis bold withOccurrences: 5.
-	self assert: CTRunArray runs size equals: 2
+	self assert: array runs size equals: 2
 ]
 
 { #category : #tests }
@@ -96,23 +96,23 @@ CTRunArrayTest >> testCTRunArrayInvariant [
 	 variables for which no accessors are defined. The same method is used by the debuggers 
 	 and by various inspectors. The assertion itself explains the meaning of the cached values."
 	
-	| CTRunArray |
-	CTRunArray := CTRunArray new.
-	CTRunArray 
+	| runArray |
+	runArray := CTRunArray new.
+	runArray 
 		add: TextEmphasis normal withOccurrences: 5;
 		add: TextEmphasis bold withOccurrences: 5;
 		add: TextEmphasis normal withOccurrences: 5.
 	self assert:
-       ((1 to: CTRunArray size) allSatisfy:
+       ((1 to: runArray size) allSatisfy:
            [:idx |  | lastIndex lastOffset lastRun lengthOfPreviousRuns |
-               CTRunArray at: idx.  " updates the cached values "
-               lastIndex := CTRunArray instVarNamed: 'lastIndex'.
-               lastRun := CTRunArray instVarNamed: 'lastRun'.
-               lastOffset := CTRunArray instVarNamed: 'lastOffset'.
+               runArray at: idx.  " updates the cached values "
+               lastIndex := runArray instVarNamed: 'lastIndex'.
+               lastRun := runArray instVarNamed: 'lastRun'.
+               lastOffset := runArray instVarNamed: 'lastOffset'.
                lengthOfPreviousRuns 
                    := (1 to: lastRun - 1)
                       inject: 0
-                       into: [:sum :idx2 | sum + (CTRunArray runs at: idx2)].
+                       into: [:sum :idx2 | sum + (runArray runs at: idx2)].
                lastIndex = (lastOffset + lengthOfPreviousRuns + 1) 
            ]
        )
@@ -121,37 +121,37 @@ CTRunArrayTest >> testCTRunArrayInvariant [
 { #category : #tests }
 CTRunArrayTest >> testCTRunArrayReversal [
   	"This tests the reversal of a CTRunArray."
-	| CTRunArray |
-	CTRunArray := CTRunArray new.
-	CTRunArray 
+	| runArray |
+	runArray := CTRunArray new.
+	runArray 
 		add: TextEmphasis normal withOccurrences: 5;
 		add: TextEmphasis bold withOccurrences: 5;
 		add: TextEmphasis normal withOccurrences: 5.
-	self assert: CTRunArray reversed runs size equals: 3. 
+	self assert: runArray reversed runs size equals: 3. 
 ]
 
 { #category : #tests }
 CTRunArrayTest >> testCTRunArrayRunsAreNotMerged [
 	"This demonstrates that different runs are not merged."
-	| CTRunArray |
-	CTRunArray := CTRunArray new.
-	CTRunArray 
+	| runArray |
+	runArray := CTRunArray new.
+	runArray 
 		add: TextEmphasis normal withOccurrences: 5;
 		add: TextEmphasis bold withOccurrences: 5;
 		add: TextEmphasis normal withOccurrences: 5.
-	self assert: CTRunArray runs size equals: 3 
+	self assert: runArray runs size equals: 3 
 ]
 
 { #category : #tests }
 CTRunArrayTest >> testCTRunArrayRunsSize [
  	"This demonstrates that the size of a run array is the sum of the sizes of its runs."
-	| CTRunArray |
-	CTRunArray := CTRunArray new.
-  	CTRunArray 
+	| runArray |
+	runArray := CTRunArray new.
+  	runArray 
 		add: TextEmphasis normal withOccurrences: 5;
 		add: TextEmphasis bold withOccurrences: 5;
 		add: TextEmphasis normal withOccurrences: 5.
-	self assert: CTRunArray size equals: 15. 
+	self assert: runArray size equals: 15. 
 ]
 
 { #category : #'tests - accessing' }
