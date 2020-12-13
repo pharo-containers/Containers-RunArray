@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://img.shields.io/badge/license-MIT-blue.svg)
-![https://github.com/pharo-containers/Containers-RunArray/workflows/matrix/badge.svg](https://github.com/pharo-containers/Containers-RunArray/workflows/matrix/badge.svg)
+![https://github.com/pharo-containers/Containers-RunArray/workflows/currentStablePharo/badge.svg](https://github.com/pharo-containers/Containers-RunArray/workflows/currentStablePharo/badge.svg)
 
 # Containers-RunArray
 A runarray is a collection optimized for sequence of repeating values. 
