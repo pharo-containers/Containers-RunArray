@@ -1,0 +1,276 @@
+"
+SUnit tests for class CTRunArray
+"
+Class {
+	#name : #CTRunArrayTest,
+	#superclass : #TestCase,
+	#category : #'Containers-RunArray-Tests'
+}
+
+{ #category : #'tests - instance creation' }
+CTRunArrayTest >> testANewCTRunArrayIsEmpty [
+	self assertEmpty: CTRunArray new
+]
+
+{ #category : #'tests - adding' }
+CTRunArrayTest >> testAdd [
+
+	| run |
+	run := CTRunArray new. 
+	self assert: run size equals: 0.
+	
+	run add: $A.
+	self assert: run size equals: 1.
+	run add: $A.
+	self assert: run size equals: 2.
+	run add: $B.
+	self assert: run size equals: 3.
+]
+
+{ #category : #'tests - adding' }
+CTRunArrayTest >> testAddAddsAsLastElement [
+
+	| run |
+	run := CTRunArray new. 
+	self assert: run size equals: 0.
+	
+	run add: $A.
+	run add: $A.
+	run add: $B.
+	self assert: (run at: 3) equals: $B
+]
+
+{ #category : #'tests - accessing' }
+CTRunArrayTest >> testAt [
+	
+	| array |
+	array := CTRunArray new: 5 withAll: 2.
+	self assert: (array at: 3) equals: 2.
+	
+	array at: 3 put: 5.
+	self assert: (array at: 3) equals: 5
+
+]
+
+{ #category : #'tests - accessing' }
+CTRunArrayTest >> testAtPut [
+	
+	| array |
+	array := CTRunArray new: 5 withAll: 2.
+	
+	array at: 3 put: 5.
+	self assert: array asArray equals: #(2 2 5 2 2).
+	
+	array at: 1 put: 1.
+	self assert: array asArray equals: #(1 2 5 2 2)
+]
+
+{ #category : #'tests - accessing' }
+CTRunArrayTest >> testAtPut2 [
+	
+	| array |
+	array := CTRunArray new: 5 withAll: 2.
+	
+	self should: [array at: 0 put: 5] raise: Error.
+	self should: [array at: 6 put: 5] raise: Error.
+	self should: [array at: $b put: 5] raise: Error
+]
+
+{ #category : #tests }
+CTRunArrayTest >> testCTRunArrayAdjacentMerge [
+	"This demonstrates that adjancent runs with equal attributes are merged."
+
+	| CTRunArray |
+	CTRunArray := CTRunArray new.
+	CTRunArray
+		add: TextEmphasis normal withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5.
+	self assert: CTRunArray runs size equals: 2
+]
+
+{ #category : #tests }
+CTRunArrayTest >> testCTRunArrayInvariant [
+	"This verifies that the fundamental invariant of a CTRunArray is always satisfied.
+	 This method is a bit tricky. First, it uses Object>>instVarNamed: to access instance 
+	 variables for which no accessors are defined. The same method is used by the debuggers 
+	 and by various inspectors. The assertion itself explains the meaning of the cached values."
+	
+	| CTRunArray |
+	CTRunArray := CTRunArray new.
+	CTRunArray 
+		add: TextEmphasis normal withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5;
+		add: TextEmphasis normal withOccurrences: 5.
+	self assert:
+       ((1 to: CTRunArray size) allSatisfy:
+           [:idx |  | lastIndex lastOffset lastRun lengthOfPreviousRuns |
+               CTRunArray at: idx.  " updates the cached values "
+               lastIndex := CTRunArray instVarNamed: 'lastIndex'.
+               lastRun := CTRunArray instVarNamed: 'lastRun'.
+               lastOffset := CTRunArray instVarNamed: 'lastOffset'.
+               lengthOfPreviousRuns 
+                   := (1 to: lastRun - 1)
+                      inject: 0
+                       into: [:sum :idx2 | sum + (CTRunArray runs at: idx2)].
+               lastIndex = (lastOffset + lengthOfPreviousRuns + 1) 
+           ]
+       )
+]
+
+{ #category : #tests }
+CTRunArrayTest >> testCTRunArrayReversal [
+  	"This tests the reversal of a CTRunArray."
+	| CTRunArray |
+	CTRunArray := CTRunArray new.
+	CTRunArray 
+		add: TextEmphasis normal withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5;
+		add: TextEmphasis normal withOccurrences: 5.
+	self assert: CTRunArray reversed runs size equals: 3. 
+]
+
+{ #category : #tests }
+CTRunArrayTest >> testCTRunArrayRunsAreNotMerged [
+	"This demonstrates that different runs are not merged."
+	| CTRunArray |
+	CTRunArray := CTRunArray new.
+	CTRunArray 
+		add: TextEmphasis normal withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5;
+		add: TextEmphasis normal withOccurrences: 5.
+	self assert: CTRunArray runs size equals: 3 
+]
+
+{ #category : #tests }
+CTRunArrayTest >> testCTRunArrayRunsSize [
+ 	"This demonstrates that the size of a run array is the sum of the sizes of its runs."
+	| CTRunArray |
+	CTRunArray := CTRunArray new.
+  	CTRunArray 
+		add: TextEmphasis normal withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5;
+		add: TextEmphasis normal withOccurrences: 5.
+	self assert: CTRunArray size equals: 15. 
+]
+
+{ #category : #'tests - accessing' }
+CTRunArrayTest >> testFirst [
+	
+	| array |
+	array := CTRunArray new: 5 withAll: 2.
+	self assert: array first equals: 2.
+	
+	array := 'abcd' as: CTRunArray.
+	self assert: array first equals: $a
+]
+
+{ #category : #'tests - instance creation' }
+CTRunArrayTest >> testIsSelfEvaluating [
+	| array array2 |
+	array := CTRunArray new: 5 withAll: 2.
+	self assert: array isSelfEvaluating.
+	array2 := CTRunArray new: 5 withAll: Object new.
+	array2 isSelfEvaluating ifTrue: [self
+		assert: (self class compiler evaluate: array2 printString) = array2
+		description: 'a self evaluating should evaluate as self']
+]
+
+{ #category : #'tests - accessing' }
+CTRunArrayTest >> testLast [
+	
+	| array |
+	array := CTRunArray new: 5 withAll: 2.
+	self assert: array last equals: 2.
+	
+	array := 'abcd' as: CTRunArray.
+	self assert: array last equals: $d
+]
+
+{ #category : #'tests - instance creation' }
+CTRunArrayTest >> testNew [
+	
+	| array |
+	array := CTRunArray new.
+	self assert: array size equals: 0
+]
+
+{ #category : #'tests - instance creation' }
+CTRunArrayTest >> testNewFromArray [
+	
+	| array |
+	array := CTRunArray newFrom: #($a $b $b $b $b $c $c $a).
+	self assert: array size equals: 8.
+	self assert: array asArray equals: #($a $b $b $b $b $c $c $a)
+]
+
+{ #category : #'tests - instance creation' }
+CTRunArrayTest >> testNewFromString [
+	
+	| array |
+	array := CTRunArray newFrom: 'abbbbcca'.
+	self assert: array size equals: 8.
+	self assert: array asArray equals: #($a $b $b $b $b $c $c $a)
+]
+
+{ #category : #'tests - instance creation' }
+CTRunArrayTest >> testNewWithAll [
+	
+	| array |
+	array := CTRunArray new: 5 withAll: 2.
+	self assert: array size equals: 5.
+	self assert: array asArray equals: #(2 2 2 2 2)
+]
+
+{ #category : #'tests - instance creation' }
+CTRunArrayTest >> testNewWithSize [
+	|array|
+	array := CTRunArray new: 5.
+	self assert: array size equals: 5.
+	1 to: 5 do: [:index | self assert: (array at: index) isNil]
+]
+
+{ #category : #'tests - accessing' }
+CTRunArrayTest >> testRunLengthAt [
+	
+	| array |
+	array := #($a $b $b $c $c $c $d $d) as: CTRunArray.
+	self assert: (array runLengthAt: 1) equals: 1.
+	self assert: (array runLengthAt: 2) equals: 2.
+	self assert: (array runLengthAt: 3) equals: 1.
+	self assert: (array runLengthAt: 4) equals: 3.
+	self assert: (array runLengthAt: 5) equals: 2.
+	self assert: (array runLengthAt: 6) equals: 1.
+	self assert: (array runLengthAt: 7) equals: 2.
+	self assert: (array runLengthAt: 8) equals: 1.
+]
+
+{ #category : #'tests - instance creation' }
+CTRunArrayTest >> testRunsValues [
+	
+	| array |
+	array := CTRunArray runs: #(1 4 2 1) values: #($a $b $c $a).
+	self assert: array size equals: 8.
+	self assert: array asArray equals: #($a $b $b $b $b $c $c $a)
+]
+
+{ #category : #'tests - instance creation' }
+CTRunArrayTest >> testScanFromANSICompatibility [
+ 
+	CTRunArray scanFrom: '()f1dNumber new;;' readStream.
+	CTRunArray scanFrom: '()a1death;;' readStream.
+	CTRunArray scanFrom: '()F1death;;' readStream
+]
+
+{ #category : #'tests - accessing' }
+CTRunArrayTest >> testWithStartStopAndValueDo [
+	
+	| array elements startStops |
+	array := #($a $b $b $c $c $c $d $d) as: CTRunArray.
+	elements := OrderedCollection new.
+	startStops := OrderedCollection new.
+	array withStartStopAndValueDo: [:start :stop :value | elements add: value. startStops add: start->stop].
+	
+	self assert: elements asArray equals: #($a $b  $c  $d).
+	self assert: startStops asArray equals: {1->1 . 2->3 . 4->6 . 7->8}
+]
