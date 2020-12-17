@@ -551,9 +551,11 @@ CTRunArray >> isSorted [
 ]
 
 { #category : #testing }
-CTRunArray >> isSortedBy: aBlock [
+CTRunArray >> isSortedBy: aTwoArgumentBlock [
+	"Return whether the receiver values are sorted according to the two block argument predicate block."
+	"((#(1 1 2 2 3 3 3 3) as: self) isSortedBy: [:a :b | a <= b ]) >>> true"
 	
-	^ values isSortedBy: aBlock
+	^ values isSortedBy: aTwoArgumentBlock
 ]
 
 { #category : #accessing }
