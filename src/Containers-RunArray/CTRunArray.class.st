@@ -478,7 +478,7 @@ CTRunArray >> do: aBlock [
 
 { #category : #private }
 CTRunArray >> fillFrom: aCollection with: aBlock [
-	"Evaluate aBlock with each of aCollection's elements as the argument.
+	"Execute aBlock with each of aCollection's elements as the argument.
 	Collect the resulting values into self. Answer self."
 
 	| newRuns newValues lastLength lastValue |
@@ -560,7 +560,7 @@ CTRunArray >> last [
 
 { #category : #private }
 CTRunArray >> mapValues: mapBlock [
-	"NOTE: only meaningful to an entire set of runs"
+	"Private -- NOTE: only meaningful to an entire set of runs"
 
 	values := values collect: mapBlock
 ]
@@ -748,7 +748,8 @@ CTRunArray >> select: aBlock [
 
 { #category : #private }
 CTRunArray >> setRuns: newRuns setValues: newValues [
-
+	"Private -- set the internal representations of runs and values."
+	
 	lastIndex := nil. "flush access cache"
 	runs := newRuns asArray.
 	values := newValues asArray.
@@ -777,8 +778,9 @@ CTRunArray >> storeOn: aStream [
 
 { #category : #private }
 CTRunArray >> values [
-	"Answer the values in the receiver."
-
+	"Private -- Answer the internal way values are stored in the receiver." 
+	"(#($a $b $b $c $c $c $d $d $d $d $a) as: self )values >>> #($a $b $c $d $a)"
+	
 	^ values
 ]
 

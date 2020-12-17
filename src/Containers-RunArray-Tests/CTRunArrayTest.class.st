@@ -193,6 +193,17 @@ CTRunArrayTest >> testAtPutOutOfRangeRaiseError [
 	self should: [ runArrayNumbers at: $b put: 5 ] raise: Error
 ]
 
+{ #category : #'tests - iteration' }
+CTRunArrayTest >> testFillFromWith [
+	
+	| newRun |
+	newRun := self newRunArray. 
+	newRun fillFrom: #($a $b $c $c $d) with: [ :each | each digitValue ].
+	self assert: (newRun at: 1) equals: 10.
+	self assert: (newRun at: 3) equals: 12.
+	self assert: (newRun at: 4) equals: 12.
+]
+
 { #category : #'tests - accessing' }
 CTRunArrayTest >> testFirst [
 
