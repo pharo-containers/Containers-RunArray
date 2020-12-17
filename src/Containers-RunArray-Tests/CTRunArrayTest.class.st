@@ -74,10 +74,29 @@ CTRunArrayTest >> testAddAddsAsLastElement [
 { #category : #'tests - adding' }
 CTRunArrayTest >> testAddFirst [
 
-
-
 	runArray addFirst: $z.
 	self assert: runArray asArray  equals: #($z $a $b $b $c $c $c $d $d $d $d)
+]
+
+{ #category : #'tests - adding' }
+CTRunArrayTest >> testAddFirstWithSameStartingElement [
+
+	runArray addFirst: $a.
+	self assert: runArray asArray  equals: #($a $a $b $b $c $c $c $d $d $d $d)
+]
+
+{ #category : #'tests - adding' }
+CTRunArrayTest >> testAddLast [
+
+	runArray addLast: $z.
+	self assert: runArray asArray  equals: #( $a $b $b $c $c $c $d $d $d $d $z)
+]
+
+{ #category : #'tests - adding' }
+CTRunArrayTest >> testAddLastWithSameEndingElement [
+
+	runArray addLast: $d.
+	self assert: runArray asArray  equals: #($a $b $b $c $c $c $d $d $d $d $d)
 ]
 
 { #category : #'tests - adding' }
@@ -93,6 +112,30 @@ CTRunArrayTest >> testAddWithOccurrences [
 	self assert: run size equals: 8.
 	run add: $B.
 	self assert: run size equals: 9
+]
+
+{ #category : #'tests - converting' }
+CTRunArrayTest >> testAsBag [
+
+	| bag |
+	bag := runArray asBag.
+	self assert: bag class equals: Bag.
+	self assert: (bag occurrencesOf: $a) equals: 1.
+	self assert: (bag occurrencesOf: $b) equals: 2.
+	self assert: (bag occurrencesOf: $c) equals: 3.
+	self assert: (bag occurrencesOf: $d) equals: 4.
+]
+
+{ #category : #'tests - converting' }
+CTRunArrayTest >> testAsSet [
+
+	| set |
+	set := runArray asSet.
+	self assert: set class equals: Set.
+	self assert: (set includes: $a). 
+	self assert: (set includes: $b).
+	self assert: (set includes: $c).
+	self assert: (set includes: $d).
 ]
 
 { #category : #'tests - accessing' }
@@ -226,6 +269,27 @@ CTRunArrayTest >> testNewWithSize [
 	1 to: 5 do: [:index | self assert: (array at: index) isNil]
 ]
 
+{ #category : #'tests - adding' }
+CTRunArrayTest >> testRepeatLastifEmptyWhenEmpty [
+
+	| newRun sizeBefore |
+	newRun := self newRunArray.
+	sizeBefore := newRun size.
+	newRun repeatLast: 4 ifEmpty: [ $W ].
+	self assert: newRun size equals: sizeBefore + 4.
+	self assert: newRun asArray equals: #( $W $W $W $W )
+]
+
+{ #category : #'tests - adding' }
+CTRunArrayTest >> testRepeatLastifEmptyWhenNotEmpty [
+
+	| sizeBefore |
+	sizeBefore := runArray size.
+	runArray repeatLast: 4 ifEmpty: [ $W ].
+	self assert: runArray size equals: sizeBefore + 4.
+	self assert: runArray asArray equals: #( $a $b $b $c $c $c $d $d $d $d $d $d $d $d )
+]
+
 { #category : #'tests - merging' }
 CTRunArrayTest >> testRunArrayAdjacentMerge [
 
@@ -329,6 +393,12 @@ CTRunArrayTest >> testRunLengthAt [
 	self assert: (array runLengthAt: 6) equals: 1.
 	self assert: (array runLengthAt: 7) equals: 2.
 	self assert: (array runLengthAt: 8) equals: 1.
+]
+
+{ #category : #'tests - private' }
+CTRunArrayTest >> testRuns [
+
+	self assert: runArray runs equals: #(1 2 3 4)
 ]
 
 { #category : #'tests - instance creation' }

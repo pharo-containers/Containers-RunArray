@@ -647,7 +647,8 @@ CTRunArray >> removeAll [
 
 { #category : #adding }
 CTRunArray >> repeatLast: times ifEmpty: defaultBlock [
-	"add the last value back again, the given number of times. If we are empty, add (defaultBlock value)"
+	"Add the last value back again, the given number of times. If we are empty, add times the value reuturned by the execution of the defaultBlock."
+	"(self new repeatLast: 3 ifEmpty: [$W]) asArray >>> #($W $W $W)"
 	
 	times = 0 ifTrue: [ ^self ].
 	lastIndex := nil. "flush access cache"
@@ -656,20 +657,7 @@ CTRunArray >> repeatLast: times ifEmpty: defaultBlock [
 			[ runs := runs copyWith: times.
 			values := values copyWith: defaultBlock value ]
 		ifFalse:
-			[ runs at: runs size put: runs last+times ] 
-]
-
-{ #category : #adding }
-CTRunArray >> repeatLastIfEmpty: defaultBlock [
-	"add the last value back again. If we are empty, add (defaultBlock value)"
-	
-	lastIndex := nil. "flush access cache"
-	(runs size = 0)
-		ifTrue:[
-			runs := runs copyWith: 1.
-			values := values copyWith: defaultBlock value]
-		ifFalse:
-			[runs at: runs size put: runs last+1 ]
+			[ runs at: runs size put: runs last + times ] 
 ]
 
 { #category : #enumerating }
@@ -696,7 +684,7 @@ CTRunArray >> reverseDo: aBlock [
 				whileTrue: [ aBlock value: v ] ]
 ]
 
-{ #category : #converting }
+{ #category : #changed }
 CTRunArray >> reversed [
 	^ self class runs: runs reversed values: values reversed
 ]
@@ -712,7 +700,8 @@ CTRunArray >> runLengthAt: index [
 
 { #category : #private }
 CTRunArray >> runs [
-
+	"Private -- Runs are the private encoding to sequences of values. A runs of 2 means that the corresponding values is repeted twice."
+	
 	^ runs
 ]
 
@@ -793,7 +782,7 @@ CTRunArray >> values [
 	^ values
 ]
 
-{ #category : #accessing }
+{ #category : #enumerating }
 CTRunArray >> withStartStopAndValueDo: aBlock [
 
 	| start |
