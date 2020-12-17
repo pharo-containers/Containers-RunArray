@@ -703,8 +703,9 @@ CTRunArray >> reversed [
 
 { #category : #accessing }
 CTRunArray >> runLengthAt: index [ 
-	"Answer the length remaining in run beginning at index."
-
+	"Answer the length remaining in the associated run beginning at index."
+	"(#($a $b $b $c $c $c $d $d) as: CTRunArray) runLengthAt: 4) >>> 3"
+	
 	self at: index 
 		setRunOffsetAndValue: [:run :offset :value | ^(runs at: run) - offset]
 ]

@@ -48,7 +48,7 @@ CTRunArrayTest >> testANewRunArrayIsEmpty [
 CTRunArrayTest >> testAdd [
 
 	| run |
-	run := self classToTest new.
+	run := self newRunArray.
 	self assert: run size equals: 0.
 
 	run add: $A.
@@ -63,13 +63,27 @@ CTRunArrayTest >> testAdd [
 CTRunArrayTest >> testAddAddsAsLastElement [
 
 	| run |
-	run := self classToTest new.
+	run := self newRunArray.
 	self assert: run size equals: 0.
-
 	run add: $A.
 	run add: $A.
 	run add: $B.
 	self assert: (run at: 3) equals: $B
+]
+
+{ #category : #'tests - adding' }
+CTRunArrayTest >> testAddWithOccurrences [ 
+
+	| run |
+	run := self newRunArray.
+	self assert: run size equals: 0.
+
+	run add: $A withOccurrences: 5.
+	self assert: run size equals: 5.
+	run add: $A withOccurrences: 3.
+	self assert: run size equals: 8.
+	run add: $B.
+	self assert: run size equals: 9
 ]
 
 { #category : #'tests - accessing' }
@@ -130,11 +144,7 @@ CTRunArrayTest >> testAtPutOutOfRangeRaiseError [
 { #category : #'tests - accessing' }
 CTRunArrayTest >> testFirst [
 
-	| array |
-	array := self classToTest new: 5 withAll: 2.
-	self assert: array first equals: 2.
-
-	
+	self assert: runArrayNumbers first equals: 2.
 	self assert: runArray first equals: $a
 ]
 
@@ -158,12 +168,9 @@ CTRunArrayTest >> testIsSelfEvaluating [
 { #category : #'tests - accessing' }
 CTRunArrayTest >> testLast [
 	
-	| array |
-	array := self classToTest new: 5 withAll: 2.
-	self assert: array last equals: 2.
-	
-	array := 'abcd' as: self classToTest.
-	self assert: array last equals: $d
+
+	self assert: runArrayNumbers last equals: 2.
+	self assert: runArray last equals: $d
 ]
 
 { #category : #'tests - instance creation' }
@@ -192,7 +199,7 @@ CTRunArrayTest >> testNewFromString [
 	self assert: array asArray equals: #($a $b $b $b $b $c $c $a)
 ]
 
-{ #category : #'tests - accessing' }
+{ #category : #'tests - instance creation' }
 CTRunArrayTest >> testNewWithAll [
 
 	| array |
@@ -298,10 +305,17 @@ CTRunArrayTest >> testRunLengthAt [
 	
 	| array |
 	array := #($a $b $b $c $c $c $d $d) as: self classToTest.
+             "1   2  3  4  5  6  7  8 "	
 	self assert: (array runLengthAt: 1) equals: 1.
+	"there is only on $a to go"
 	self assert: (array runLengthAt: 2) equals: 2.
+	
 	self assert: (array runLengthAt: 3) equals: 1.
+	"there is only on $b to go"
+	
 	self assert: (array runLengthAt: 4) equals: 3.
+	"there are 3 $c to go"
+	
 	self assert: (array runLengthAt: 5) equals: 2.
 	self assert: (array runLengthAt: 6) equals: 1.
 	self assert: (array runLengthAt: 7) equals: 2.
@@ -325,7 +339,7 @@ CTRunArrayTest >> testScanFromANSICompatibility [
 	self classToTest scanFrom: '()F1death;;' readStream
 ]
 
-{ #category : #'tests - accessing' }
+{ #category : #'tests - iteration' }
 CTRunArrayTest >> testWithStartStopAndValueDo [
 	
 	| array elements startStops |
