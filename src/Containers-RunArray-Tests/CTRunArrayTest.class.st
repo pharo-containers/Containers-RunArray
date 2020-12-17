@@ -212,6 +212,13 @@ CTRunArrayTest >> testFirst [
 ]
 
 { #category : #'tests - testing' }
+CTRunArrayTest >> testIncludes [
+
+	self assert: (runArray includes: $c).
+	self deny: (runArray includes: $z).
+]
+
+{ #category : #'tests - testing' }
 CTRunArrayTest >> testIsEmpty [
 
 	self assert: self newRunArray isEmpty
@@ -226,6 +233,21 @@ CTRunArrayTest >> testIsSelfEvaluating [
 	array2 isSelfEvaluating ifTrue: [self
 		assert: (self class compiler evaluate: array2 printString) = array2
 		description: 'a self evaluating should evaluate as self']
+]
+
+{ #category : #'tests - testing' }
+CTRunArrayTest >> testIsSorted [
+
+	self assert: runArray isSorted.
+	runArray addLast: $a.
+	self deny: runArray isSorted.
+]
+
+{ #category : #'tests - testing' }
+CTRunArrayTest >> testIsSortedBy [
+
+	self assert: ((#(1 1 2 2 3 3 3 3) as: self classToTest) isSortedBy: [:a :b | a <= b ]).
+	self assert: ((#(1 1 2 2 3 3 3 3) as: self classToTest) reversed isSortedBy: [:a :b | b <= a ]).
 ]
 
 { #category : #'tests - accessing' }
@@ -278,6 +300,14 @@ CTRunArrayTest >> testNewWithSize [
 	array := self classToTest new: 5.
 	self assert: array size equals: 5.
 	1 to: 5 do: [:index | self assert: (array at: index) isNil]
+]
+
+{ #category : #'tests - adding' }
+CTRunArrayTest >> testRemoveAll [
+
+	runArray removeAll.
+	self assert: runArray isEmpty.
+	self assert: runArray size equals: 0.
 ]
 
 { #category : #'tests - adding' }

@@ -535,7 +535,7 @@ CTRunArray >> first [
 CTRunArray >> includes: anObject [
 	"Answer whether anObject is one of the receiver's elements."
 
-	^values includes: anObject
+	^ values includes: anObject
 ]
 
 { #category : #'self evaluating' }
@@ -545,11 +545,14 @@ CTRunArray >> isSelfEvaluating [
 
 { #category : #testing }
 CTRunArray >> isSorted [
+	"Returns whether the elements of the receiver are sorted taking into account their possible repetitions out of the comparison."
+	
 	^ values isSorted
 ]
 
 { #category : #testing }
 CTRunArray >> isSortedBy: aBlock [
+	
 	^ values isSortedBy: aBlock
 ]
 
@@ -627,7 +630,9 @@ CTRunArray >> remove: anObject ifAbsent: exceptionBlock [
 	(run := runs at: index) > 1
 		ifTrue: [runs at: index put: run - 1]
 		ifFalse:
-			[mustCoalesce := index > 1 and: [index < values size and: [(values at: index - 1) = (values at: index + 1)]].
+			[ mustCoalesce := index > 1 
+				and: [index < values size
+					and: [(values at: index - 1) = (values at: index + 1)]].
 			runs := runs copyWithoutIndex: index.
 			values := values copyWithoutIndex: index.
 			mustCoalesce
