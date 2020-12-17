@@ -268,7 +268,8 @@ CTRunArray >> asSet [
 
 { #category : #accessing }
 CTRunArray >> at: index [
-
+	"Return the value at index, index."
+	
 	self at: index setRunOffsetAndValue: [:run :offset :value | ^value]
 ]
 

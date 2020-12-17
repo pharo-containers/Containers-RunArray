@@ -4,6 +4,10 @@ SUnit tests for class CTRunArray
 Class {
 	#name : #CTRunArrayTest,
 	#superclass : #TestCase,
+	#instVars : [
+		'runArray',
+		'runArrayNumbers'
+	],
 	#category : #'Containers-RunArray-Tests'
 }
 
@@ -13,8 +17,29 @@ CTRunArrayTest >> classToTest [
 	^ CTRunArray
 ]
 
+{ #category : #running }
+CTRunArrayTest >> newRunArray [
+
+	^ self classToTest new.
+
+]
+
+{ #category : #running }
+CTRunArrayTest >> setUp [ 
+	super setUp.
+	runArray := #($a $b $b $c $c $c $d $d $d $d) as: self classToTest.
+	runArrayNumbers := self classToTest new: 5 withAll: 2.
+
+]
+
 { #category : #'tests - instance creation' }
 CTRunArrayTest >> testANewCTRunArrayIsEmpty [
+
+	self assertEmpty: self classToTest new
+]
+
+{ #category : #'tests - instance creation' }
+CTRunArrayTest >> testANewRunArrayIsEmpty [
 
 	self assertEmpty: self classToTest new
 ]
@@ -50,25 +75,28 @@ CTRunArrayTest >> testAddAddsAsLastElement [
 { #category : #'tests - accessing' }
 CTRunArrayTest >> testAt [
 
-	| array |
-	array := self classToTest new: 5 withAll: 2.
-	self assert: (array at: 3) equals: 2.
+	self assert: (runArrayNumbers at: 3) equals: 2.
+	self assert: runArrayNumbers asArray equals: #(2 2 2 2 2).
+	runArrayNumbers at: 3 put: 5.
+	self assert: (runArrayNumbers at: 3) equals: 5
+]
 
-	array at: 3 put: 5.
-	self assert: (array at: 3) equals: 5
+{ #category : #'tests - accessing' }
+CTRunArrayTest >> testAt2 [
+	
+	self assert: (runArray at: 3) equals: $b.
+	self assert: (runArray at: 1) equals: $a.
+	self assert: (runArray at: 6) equals: $c.
 ]
 
 { #category : #'tests - accessing' }
 CTRunArrayTest >> testAtPut [
 
-	| array |
-	array := self classToTest new: 5 withAll: 2.
+	runArrayNumbers at: 3 put: 5.
+	self assert: runArrayNumbers asArray equals: #( 2 2 5 2 2 ).
 
-	array at: 3 put: 5.
-	self assert: array asArray equals: #( 2 2 5 2 2 ).
-
-	array at: 1 put: 1.
-	self assert: array asArray equals: #( 1 2 5 2 2 )
+	runArrayNumbers at: 1 put: 1.
+	self assert: runArrayNumbers asArray equals: #( 1 2 5 2 2 )
 ]
 
 { #category : #'tests - accessing' }
@@ -82,87 +110,21 @@ CTRunArrayTest >> testAtPut2 [
 	self should: [ array at: $b put: 5 ] raise: Error
 ]
 
-{ #category : #tests }
-CTRunArrayTest >> testCTRunArrayAdjacentMerge [
+{ #category : #'tests - accessing' }
+CTRunArrayTest >> testAtPutChangingStartBorder [
+	"runArray := #($a $b $b $c $c $c $d $d $d $d)a"
 
-	"This demonstrates that adjancent runs with equal attributes are merged."
-
-	| array |
-	array := self classToTest new.
-	array
-		add: TextEmphasis normal withOccurrences: 5;
-		add: TextEmphasis bold withOccurrences: 5;
-		add: TextEmphasis bold withOccurrences: 5.
-	self assert: array runs size equals: 2
+	runArray at: 2 put: $a.
+	self assert: (runArray at: 3) equals: $b.
+	self assert: runArray asArray equals: #($a $a $b $c $c $c $d $d $d $d)
 ]
 
-{ #category : #tests }
-CTRunArrayTest >> testCTRunArrayInvariant [
+{ #category : #'tests - accessing' }
+CTRunArrayTest >> testAtPutOutOfRangeRaiseError [
 
-	"This verifies that the fundamental invariant of a CTRunArray is always satisfied.
-	 This method is a bit tricky. First, it uses Object>>instVarNamed: to access instance 
-	 variables for which no accessors are defined. The same method is used by the debuggers 
-	 and by various inspectors. The assertion itself explains the meaning of the cached values."
-
-	| runArray |
-	runArray := self classToTest new.
-	runArray
-		add: TextEmphasis normal withOccurrences: 5;
-		add: TextEmphasis bold withOccurrences: 5;
-		add: TextEmphasis normal withOccurrences: 5.
-	self assert: ((1 to: runArray size) allSatisfy: [ :idx | 
-			 | lastIndex lastOffset lastRun lengthOfPreviousRuns |
-			 runArray at: idx. " updates the cached values "
-			 lastIndex := runArray instVarNamed: 'lastIndex'.
-			 lastRun := runArray instVarNamed: 'lastRun'.
-			 lastOffset := runArray instVarNamed: 'lastOffset'.
-			 lengthOfPreviousRuns := (1 to: lastRun - 1)
-				                         inject: 0
-				                         into: [ :sum :idx2 | 
-				                         sum + (runArray runs at: idx2) ].
-			 lastIndex = (lastOffset + lengthOfPreviousRuns + 1) ])
-]
-
-{ #category : #tests }
-CTRunArrayTest >> testCTRunArrayReversal [
-
-	"This tests the reversal of a CTRunArray."
-
-	| runArray |
-	runArray := self classToTest new.
-	runArray
-		add: TextEmphasis normal withOccurrences: 5;
-		add: TextEmphasis bold withOccurrences: 5;
-		add: TextEmphasis normal withOccurrences: 5.
-	self assert: runArray reversed runs size equals: 3
-]
-
-{ #category : #tests }
-CTRunArrayTest >> testCTRunArrayRunsAreNotMerged [
-
-	"This demonstrates that different runs are not merged."
-
-	| runArray |
-	runArray := self classToTest new.
-	runArray
-		add: TextEmphasis normal withOccurrences: 5;
-		add: TextEmphasis bold withOccurrences: 5;
-		add: TextEmphasis normal withOccurrences: 5.
-	self assert: runArray runs size equals: 3
-]
-
-{ #category : #tests }
-CTRunArrayTest >> testCTRunArrayRunsSize [
-
-	"This demonstrates that the size of a run array is the sum of the sizes of its runs."
-
-	| runArray |
-	runArray := self classToTest new.
-	runArray
-		add: TextEmphasis normal withOccurrences: 5;
-		add: TextEmphasis bold withOccurrences: 5;
-		add: TextEmphasis normal withOccurrences: 5.
-	self assert: runArray size equals: 15
+	self should: [ runArrayNumbers at: 0 put: 5 ] raise: Error.
+	self should: [ runArrayNumbers at: 6 put: 5 ] raise: Error.
+	self should: [ runArrayNumbers at: $b put: 5 ] raise: Error
 ]
 
 { #category : #'tests - accessing' }
@@ -172,8 +134,14 @@ CTRunArrayTest >> testFirst [
 	array := self classToTest new: 5 withAll: 2.
 	self assert: array first equals: 2.
 
-	array := 'abcd' as: self classToTest.
-	self assert: array first equals: $a
+	
+	self assert: runArray first equals: $a
+]
+
+{ #category : #'tests - testing' }
+CTRunArrayTest >> testIsEmpty [
+
+	self assert: self newRunArray isEmpty
 ]
 
 { #category : #'tests - instance creation' }
@@ -224,13 +192,14 @@ CTRunArrayTest >> testNewFromString [
 	self assert: array asArray equals: #($a $b $b $b $b $c $c $a)
 ]
 
-{ #category : #'tests - instance creation' }
+{ #category : #'tests - accessing' }
 CTRunArrayTest >> testNewWithAll [
-	
+
 	| array |
 	array := self classToTest new: 5 withAll: 2.
-	self assert: array size equals: 5.
-	self assert: array asArray equals: #(2 2 2 2 2)
+	self assert: array asArray equals: #(2 2 2 2 2).
+	array at: 3 put: 5.
+	self assert: array asArray equals: #(2 2 5 2 2).
 ]
 
 { #category : #'tests - instance creation' }
@@ -239,6 +208,89 @@ CTRunArrayTest >> testNewWithSize [
 	array := self classToTest new: 5.
 	self assert: array size equals: 5.
 	1 to: 5 do: [:index | self assert: (array at: index) isNil]
+]
+
+{ #category : #'tests - merging' }
+CTRunArrayTest >> testRunArrayAdjacentMerge [
+
+	"This demonstrates that adjancent runs with equal attributes are merged."
+
+	| array |
+	array := self classToTest new.
+	array
+		add: TextEmphasis normal withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5.
+	self assert: array runs size equals: 2
+]
+
+{ #category : #'tests - merging' }
+CTRunArrayTest >> testRunArrayInvariant [
+
+	"This verifies that the fundamental invariant of a CTRunArray is always satisfied.
+	 This method is a bit tricky. First, it uses Object>>instVarNamed: to access instance 
+	 variables for which no accessors are defined. The same method is used by the debuggers 
+	 and by various inspectors. The assertion itself explains the meaning of the cached values."
+
+	| runArray |
+	runArray := self classToTest new.
+	runArray
+		add: TextEmphasis normal withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5;
+		add: TextEmphasis normal withOccurrences: 5.
+	self assert: ((1 to: runArray size) allSatisfy: [ :idx | 
+			 | lastIndex lastOffset lastRun lengthOfPreviousRuns |
+			 runArray at: idx. " updates the cached values "
+			 lastIndex := runArray instVarNamed: 'lastIndex'.
+			 lastRun := runArray instVarNamed: 'lastRun'.
+			 lastOffset := runArray instVarNamed: 'lastOffset'.
+			 lengthOfPreviousRuns := (1 to: lastRun - 1)
+				                         inject: 0
+				                         into: [ :sum :idx2 | 
+				                         sum + (runArray runs at: idx2) ].
+			 lastIndex = (lastOffset + lengthOfPreviousRuns + 1) ])
+]
+
+{ #category : #'tests - merging' }
+CTRunArrayTest >> testRunArrayReversal [
+
+	"This tests the reversal of a CTRunArray."
+
+	| runArray |
+	runArray := self classToTest new.
+	runArray
+		add: TextEmphasis normal withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5;
+		add: TextEmphasis normal withOccurrences: 5.
+	self assert: runArray reversed runs size equals: 3
+]
+
+{ #category : #'tests - merging' }
+CTRunArrayTest >> testRunArrayRunsAreNotMerged [
+
+	"This demonstrates that different runs are not merged."
+
+	| runArray |
+	runArray := self classToTest new.
+	runArray
+		add: TextEmphasis normal withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5;
+		add: TextEmphasis normal withOccurrences: 5.
+	self assert: runArray runs size equals: 3
+]
+
+{ #category : #'tests - merging' }
+CTRunArrayTest >> testRunArrayRunsSize [
+
+	"This demonstrates that the size of a run array is the sum of the sizes of its runs."
+
+	| runArray |
+	runArray := self classToTest new.
+	runArray
+		add: TextEmphasis normal withOccurrences: 5;
+		add: TextEmphasis bold withOccurrences: 5;
+		add: TextEmphasis normal withOccurrences: 5.
+	self assert: runArray size equals: 15
 ]
 
 { #category : #'tests - accessing' }
