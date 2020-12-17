@@ -398,7 +398,9 @@ CTRunArrayTest >> testRunLengthAt [
 { #category : #'tests - private' }
 CTRunArrayTest >> testRuns [
 
-	self assert: runArray runs equals: #(1 2 3 4)
+	self assert: runArray runs equals: #(1 2 3 4).
+	self assert: (runArray addLast: runArray first ; runs) equals: #(1 2 3 4 1).
+	
 ]
 
 { #category : #'tests - instance creation' }
@@ -416,6 +418,13 @@ CTRunArrayTest >> testScanFromANSICompatibility [
 	self classToTest scanFrom: '()f1dNumber new;;' readStream.
 	self classToTest scanFrom: '()a1death;;' readStream.
 	self classToTest scanFrom: '()F1death;;' readStream
+]
+
+{ #category : #'tests - private' }
+CTRunArrayTest >> testValues [
+
+	self assert: runArray values  equals: #($a $b $c $d).
+	self assert: (runArray addLast: runArray first ; values) equals: #($a $b $c $d $a).
 ]
 
 { #category : #'tests - iteration' }
