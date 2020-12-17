@@ -72,6 +72,15 @@ CTRunArrayTest >> testAddAddsAsLastElement [
 ]
 
 { #category : #'tests - adding' }
+CTRunArrayTest >> testAddFirst [
+
+
+
+	runArray addFirst: $z.
+	self assert: runArray asArray  equals: #($z $a $b $b $c $c $c $d $d $d $d)
+]
+
+{ #category : #'tests - adding' }
 CTRunArrayTest >> testAddWithOccurrences [ 
 
 	| run |
