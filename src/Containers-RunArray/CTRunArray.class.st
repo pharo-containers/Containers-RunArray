@@ -691,8 +691,10 @@ CTRunArray >> reverseDo: aBlock [
 				whileTrue: [ aBlock value: v ] ]
 ]
 
-{ #category : #changed }
+{ #category : #'change state' }
 CTRunArray >> reversed [
+	"Answer a copy of the receiver with element order reversed."
+	
 	^ self class runs: runs reversed values: values reversed
 ]
 

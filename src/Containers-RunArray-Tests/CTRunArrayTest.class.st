@@ -331,6 +331,16 @@ CTRunArrayTest >> testRepeatLastifEmptyWhenNotEmpty [
 	self assert: runArray asArray equals: #( $a $b $b $c $c $c $d $d $d $d $d $d $d $d )
 ]
 
+{ #category : #'tests - change state' }
+CTRunArrayTest >> testReversed [ 
+	
+	| reversed | 
+	reversed := runArray reversed. 
+	self assert: runArray first equals: reversed last. 
+	self assert: runArray last equals: reversed first. 
+	self assert: runArray size equals: reversed size. 
+]
+
 { #category : #'tests - merging' }
 CTRunArrayTest >> testRunArrayAdjacentMerge [
 
