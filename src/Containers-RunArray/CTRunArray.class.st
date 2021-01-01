@@ -795,11 +795,7 @@ CTRunArray >> size [
 CTRunArray >> storeOn: aStream [
 
 	aStream nextPut: $(.
-	aStream nextPutAll: self class name.
-	aStream nextPutAll: ' runs: '.
-	runs storeOn: aStream.
-	aStream nextPutAll: ' values: '.
-	values storeOn: aStream.
+	self printOn: aStream.
 	aStream nextPut: $)
 ]
 
@@ -822,14 +818,4 @@ CTRunArray >> withStartStopAndValueDo: aBlock [
 		aBlock value: start value: stop value: val.
 		start := stop + 1 ]
 		
-]
-
-{ #category : #printing }
-CTRunArray >> writeOn: aStream [
-
-	aStream nextWordPut: runs size.
-	1 to: runs size do:
-		[ :x |
-		aStream nextWordPut: (runs at: x).
-		aStream nextWordPut: (values at: x) ]
 ]
