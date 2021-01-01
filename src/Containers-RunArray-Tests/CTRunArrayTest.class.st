@@ -257,9 +257,9 @@ CTRunArrayTest >> testCopyUpThrough [
 	"#($a $b $b $c $c $c $d $d $d $d)"
 
 	| rArray |
-	rArray := runArray copyUpThrough: $d.
-	self assert: rArray runs equals: runArray runs.
-	self assert: rArray values equals: runArray values
+	rArray := runArray copyUpTo: $d.
+	self assert: rArray runs equals: #(1 2 3).
+	self assert: rArray values equals: #($a $b $c)
 
 ]
 
@@ -271,6 +271,17 @@ CTRunArrayTest >> testCopyUpThrough2 [
 	rArray := runArray copyUpThrough: $c.
 	self assert: rArray runs equals: #(1 2 3).
 	self assert: rArray values equals: #($a $b $c)
+
+]
+
+{ #category : #'tests - copying' }
+CTRunArrayTest >> testCopyUpTo [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| rArray |
+	rArray := runArray copyUpTo: $c.
+	self assert: rArray runs equals: #(1 2).
+	self assert: rArray values equals: #($a $b)
 
 ]
 
