@@ -389,8 +389,17 @@ CTRunArrayTest >> testDetectMax2 [
 CTRunArrayTest >> testDetectMin [
 
 	| found |
-	found := (runArray add: $a; yourself) detectMin: [ :each | each ].
+	found := (runArray add: $a; yourself) detectMin: [ :each | each codePoint ].
 	self assert: found equals: $a
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testDetectSum [
+
+	| found |
+	found := runArray detectSum: [ :each | each codePoint ].
+	self assert: found equals: 990
 	
 ]
 
