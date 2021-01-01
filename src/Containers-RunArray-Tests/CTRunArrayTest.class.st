@@ -403,6 +403,15 @@ CTRunArrayTest >> testDetectSum [
 	
 ]
 
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testDo [
+	
+	| res | 
+	res := OrderedCollection new: runArray size.
+	(runArray do: [ :each | res add: each ]).
+	self assert: res asArray equals: #($a $b $b $c $c $c $d $d $d $d)
+]
+
 { #category : #'tests - iteration' }
 CTRunArrayTest >> testFillFromWith [
 	
@@ -412,6 +421,27 @@ CTRunArrayTest >> testFillFromWith [
 	self assert: (newRun at: 1) equals: 10.
 	self assert: (newRun at: 3) equals: 12.
 	self assert: (newRun at: 4) equals: 12.
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testFindFirst [
+	
+	self assert: (runArray findFirst: [ :each | each codePoint even ]) equals: 2
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testFindFirst2 [
+	
+	self assert: (runArray findFirst: [ :each | each codePoint > 1000 ]) equals: 0
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testFindLast [
+	
+	self assert: (runArray findLast: [ :each | each codePoint even ]) equals: 10.
+	self assert: (runArray findLast: [ :each | each codePoint odd ]) equals: 6
 ]
 
 { #category : #'tests - accessing' }
@@ -571,6 +601,25 @@ CTRunArrayTest >> testRepeatLastifEmptyWhenNotEmpty [
 	self assert: runArray asArray equals: #( $a $b $b $c $c $c $d $d $d $d $d $d $d $d )
 ]
 
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testReplace [
+	
+	(runArray replace: [ :each | each codePoint even ]).
+	self assert: runArray runs equals: #(1 2 3 4).
+	self assert: runArray values equals: #(false true false true).
+	
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testReverseDo [
+	
+	| res | 
+	res := OrderedCollection new: runArray size.
+	(runArray reverseDo: [ :each | res add: each ]).
+	self assert: res asArray equals: #($d $d $d $d $c $c $c $b $b $a)
+]
+
 { #category : #'tests - change state' }
 CTRunArrayTest >> testReversed [ 
 	
@@ -691,6 +740,28 @@ CTRunArrayTest >> testRuns [
 
 	self assert: runArray runs equals: #(1 2 3 4).
 	self assert: (runArray addLast: runArray first ; runs) equals: #(1 2 3 4 1).
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testRunsAndValuesDo [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| res |
+	res := OrderedCollection new: runArray size.
+	runArray runsAndValuesDo: [ :r :v | res add: (r -> v) ].
+	self assert: res asArray equals: {1->$a . 2->$b . 3->$c . 4->$d}
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testRunsFromToDo [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| res |
+	res := OrderedCollection new: runArray size.
+	runArray runsFrom: 2 to: 4 do:  [ :r | res add: r  ].
+	self assert: res asArray equals: {$b . $c}
 	
 ]
 

@@ -357,6 +357,9 @@ CTRunArray >> coalesce [
 
 { #category : #enumerating }
 CTRunArray >> collect: aBlock [
+	"Execute aBlock with each of the receiver's elements as the argument.  
+	Collect the resulting values into a collection like the receiver. Answer  
+	the new collection."
 	"Beware, the block will be evaluated only once per group of values."
 	
 	^(self class runs: runs copy contents values: (values collect: aBlock)) coalesce
@@ -435,21 +438,21 @@ CTRunArray >> count: aBlock [
 
 { #category : #enumerating }
 CTRunArray >> detect: aBlock ifNone: exceptionBlock [ 
-	"Only evaluate once per run"
+	"Only execute aBlock once per run."
 
 	^ values detect: aBlock ifNone: exceptionBlock 
 ]
 
 { #category : #enumerating }
 CTRunArray >> detectMax: aBlock [
-	"Evaluate aBlock with each of the receiver's elements as the argument. Answer the element for which aBlock evaluates to the highest magnitude. If collection empty, return nil.  This method might also be called elect:. Only evaluate once per run"
+	"Execute aBlock with each of the receiver's elements as the argument. Answer the element for which aBlock evaluates to the highest magnitude. If collection empty, return nil.  This method might also be called elect:. Only evaluate once per run"
 
 	^ values detectMax: aBlock
 ]
 
 { #category : #enumerating }
 CTRunArray >> detectMin: aBlock [
-	"Evaluate aBlock with each of the receiver's elements as the argument. 
+	"Execute aBlock with each of the receiver's elements as the argument. 
 	Answer the element for which aBlock evaluates to the lowest number.
 	If collection empty, return nil. Only evaluate once per run"
 
@@ -469,7 +472,7 @@ CTRunArray >> detectSum: aBlock [
 
 { #category : #enumerating }
 CTRunArray >> do: aBlock [
-	"This is refined for speed"
+	"Execute aBlock with each of the receiver's elements as the argument. Refined for speed."
 	
 	1 to: runs size do: [:i |
 		| r v |
@@ -510,7 +513,9 @@ CTRunArray >> fillFrom: aCollection with: aBlock [
 
 { #category : #enumerating }
 CTRunArray >> findFirst: aBlock [
-
+	"Return the index of my first element for which aBlock evaluates as true.
+	If no matching element is found, return 0"
+	
 	| index |
 	index := 1.
 	self runsAndValuesDo: [ :run :value |
@@ -521,11 +526,13 @@ CTRunArray >> findFirst: aBlock [
 
 { #category : #enumerating }
 CTRunArray >> findLast: aBlock [
-
+	"Return the index of my last element for which aBlock evaluates as true.
+	If no matching element is found, return 0"
+	
 	| index |
 	index := values size + 1.
-	[(index := index - 1) >= 1] whileTrue:
-		[(aBlock value: (values at: index)) ifTrue: [ ^(1 to: index) detectSum: [:i | runs at: i]]].
+	[ (index := index - 1) >= 1 ] whileTrue:
+		[ (aBlock value: (values at: index)) ifTrue: [ ^(1 to: index) detectSum: [:i | runs at: i]]].
 	^ 0
 ]
 
@@ -577,7 +584,7 @@ CTRunArray >> mapValues: mapBlock [
 
 { #category : #enumerating }
 CTRunArray >> noneSatisfy: aBlock [ 
-	"Evaluate aBlock with the elements of the receiver. If aBlock returns false for all elements return true. Otherwise return false"
+	"Execute aBlock with the elements of the receiver. If aBlock returns false for all elements return true. Otherwise return false"
 
 	^ values noneSatisfy: aBlock
 ]
@@ -675,6 +682,8 @@ CTRunArray >> repeatLast: times ifEmpty: defaultBlock [
 
 { #category : #enumerating }
 CTRunArray >> replace: aBlock [
+	"Execute aBlock with each of the receiver's elements as the argument.  
+	Collect the resulting values into self."
 	"Beware, the block will be evaluated only once per group of values."
 	
 	values := values replace: aBlock.
@@ -683,7 +692,9 @@ CTRunArray >> replace: aBlock [
 
 { #category : #enumerating }
 CTRunArray >> reverseDo: aBlock [
-	"This is refined for speed"
+	"Execute aBlock with each of the receiver's elements as the argument, 
+	starting with the last element and taking each in sequence up to the 
+	first. This is the reverse of the enumeration for do:."
 	
 	| i |
 	i := runs size.
@@ -729,7 +740,7 @@ CTRunArray >> runsAndValuesDo: aBlock [
 
 { #category : #enumerating }
 CTRunArray >> runsFrom: start to: stop do: aBlock [
-	"Evaluate aBlock with all existing runs in the range from start to stop"
+	"Execute aBlock with all existing runs in the range from start to stop"
 	
 	start > stop ifTrue: [ ^ self ].
 	self at: start setRunOffsetAndValue: [ :firstRun :offset :firstValue |
@@ -748,6 +759,7 @@ CTRunArray >> runsFrom: start to: stop do: aBlock [
 
 { #category : #enumerating }
 CTRunArray >> select: aBlock [
+	"Execute aBlock with each of the receiver's elements as the argument. Collect into a new collection like the receiver, only those elements for which aBlock evaluates to true. Answer the new collection."
 	"Beware, the block will be evaluated only once per group of values."
 	
 	| newRuns newValues |
