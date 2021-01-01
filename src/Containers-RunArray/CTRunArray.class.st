@@ -442,14 +442,16 @@ CTRunArray >> detect: aBlock ifNone: exceptionBlock [
 
 { #category : #enumerating }
 CTRunArray >> detectMax: aBlock [
-	"Only evaluate once per run"
+	"Evaluate aBlock with each of the receiver's elements as the argument. Answer the element for which aBlock evaluates to the highest magnitude. If collection empty, return nil.  This method might also be called elect:. Only evaluate once per run"
 
 	^ values detectMax: aBlock
 ]
 
 { #category : #enumerating }
 CTRunArray >> detectMin: aBlock [
-	"Only evaluate once per run"
+	"Evaluate aBlock with each of the receiver's elements as the argument. 
+	Answer the element for which aBlock evaluates to the lowest number.
+	If collection empty, return nil. Only evaluate once per run"
 
 	^ values detectMin: aBlock
 ]

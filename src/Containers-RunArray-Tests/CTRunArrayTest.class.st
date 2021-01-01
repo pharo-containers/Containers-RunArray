@@ -358,6 +358,42 @@ CTRunArrayTest >> testCount [
 	self assert: (runArray count: [ :each | each = $z ]) equals: 0.
 ]
 
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testDetectIfNone [
+
+	| found |
+	found := runArray detect: [ :each | each = $z ] ifNone: [ 33 ].
+	self assert: found  equals: 33
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testDetectMax [
+
+	| found |
+	found := runArray detectMax: [ :each | each ].
+	self assert: found equals: $d
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testDetectMax2 [
+
+	| found |
+	found := (runArray add: $a; yourself) detectMax: [ :each | each ].
+	self assert: found equals: $d
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testDetectMin [
+
+	| found |
+	found := (runArray add: $a; yourself) detectMin: [ :each | each ].
+	self assert: found equals: $a
+	
+]
+
 { #category : #'tests - iteration' }
 CTRunArrayTest >> testFillFromWith [
 	
