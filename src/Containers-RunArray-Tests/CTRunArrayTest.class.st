@@ -429,6 +429,26 @@ CTRunArrayTest >> testRemoveAll [
 	self assert: runArray size equals: 0.
 ]
 
+{ #category : #'tests - removing' }
+CTRunArrayTest >> testRemoveIfAbsent [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	runArray remove: $c ifAbsent: $z.
+	self assert: runArray runs equals: #(1 2 2 4).
+	self assert: runArray values equals: #($a $b $c $d)
+
+]
+
+{ #category : #'tests - removing' }
+CTRunArrayTest >> testRemoveIfAbsentNotFound [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	runArray remove: $z ifAbsent: $z.
+	self assert: runArray runs equals: #(1 2 3 4).
+	self assert: runArray values equals: #($a $b $c $d)
+
+]
+
 { #category : #'tests - adding' }
 CTRunArrayTest >> testRepeatLastifEmptyWhenEmpty [
 

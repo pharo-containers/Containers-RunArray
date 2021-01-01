@@ -628,7 +628,8 @@ Note that an attribute may span several adjancent runs. "
 
 { #category : #removing }
 CTRunArray >> remove: anObject ifAbsent: exceptionBlock [
-
+	"Remove one occurrence of anObject in the receiver. It means that if the receiver contains a sequence of anObject, this sequence will be reduced by one."
+	
 	| index mustCoalesce run |
 	index := values indexOf: anObject ifAbsent: [^exceptionBlock value].
 	(run := runs at: index) > 1
