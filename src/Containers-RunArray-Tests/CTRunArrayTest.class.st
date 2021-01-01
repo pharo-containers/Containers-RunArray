@@ -666,6 +666,14 @@ CTRunArrayTest >> testScanFromANSICompatibility [
 	self classToTest scanFrom: '()F1death;;' readStream
 ]
 
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testSelect [
+	| lessThanC |
+	lessThanC := runArray select: [ :each | each < $c ].
+	self assert: lessThanC runs equals: #(1 2).
+	self assert: lessThanC values equals: #($a $b).
+]
+
 { #category : #'tests - private' }
 CTRunArrayTest >> testValues [
 

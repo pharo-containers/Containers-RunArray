@@ -754,8 +754,8 @@ CTRunArray >> select: aBlock [
 	self runsAndValuesDo: [:run :value |
 		(aBlock value: value)
 			ifTrue:
-				[newRuns add: run.
-				newValues add: value]].
+				[newRuns nextPut: run.
+				newValues nextPut: value]].
 	^(self class runs: newRuns contents values: newValues contents) coalesce
 ]
 
