@@ -540,9 +540,7 @@ CTRunArray >> includes: anObject [
 
 { #category : #'self evaluating' }
 CTRunArray >> isSelfEvaluating [
-	"#(1 2 2 3) as: CTRunArray >>>
-	 a CTRunArray runs: #(1 2 1) values: #(1 2 3) 
-	so clearly not self evaluating! "
+	"#(1 2 2 3) as: CTRunArray >>>  (CTRunArray runs: #(1 2 1) values: #(1 2 3))"
 
 	^ self class == CTRunArray and: [ values isSelfEvaluating ]
 ]
@@ -590,7 +588,7 @@ CTRunArray >> postCopy [
 
 { #category : #printing }
 CTRunArray >> printOn: aStream [
-	self printNameOn: aStream.
+	aStream nextPutAll: self class name.
 	aStream
 		nextPutAll: ' runs: ';
 		print: runs;

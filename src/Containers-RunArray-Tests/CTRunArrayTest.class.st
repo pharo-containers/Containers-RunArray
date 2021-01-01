@@ -20,7 +20,7 @@ CTRunArrayTest >> classToTest [
 { #category : #running }
 CTRunArrayTest >> newRunArray [
 
-	^ self classToTest new.
+	^ self classToTest new
 
 ]
 
@@ -193,6 +193,14 @@ CTRunArrayTest >> testAtPutOutOfRangeRaiseError [
 	self should: [ runArrayNumbers at: $b put: 5 ] raise: Error
 ]
 
+{ #category : #'tests - copying' }
+CTRunArrayTest >> testCopy [
+	| similarRun |
+	similarRun := runArray copy.
+	self assert: similarRun runs equals: runArray runs. 
+	self assert: similarRun values equals: runArray values. 
+]
+
 { #category : #'tests - iteration' }
 CTRunArrayTest >> testFillFromWith [
 	
@@ -224,15 +232,16 @@ CTRunArrayTest >> testIsEmpty [
 	self assert: self newRunArray isEmpty
 ]
 
-{ #category : #'tests - instance creation' }
-CTRunArrayTest >> testIsSelfEvaluating [
-	| array array2 |
-	array := self classToTest new: 5 withAll: 2.
-	self assert: array isSelfEvaluating.
-	array2 := self classToTest new: 5 withAll: Object new.
-	array2 isSelfEvaluating ifTrue: [self
-		assert: (self class compiler evaluate: array2 printString) = array2
-		description: 'a self evaluating should evaluate as self']
+{ #category : #'tests - self evaluation' }
+CTRunArrayTest >> testIsSelfEvaluating [ 
+	| similarRun |
+	"it is delicate to test self evaluation because it is a bit a meta property."
+	
+	similarRun := (self class compiler evaluate: runArray printString).
+	self assert: (runArray isSelfEvaluating).
+	self assert: (similarRun isSelfEvaluating).
+	self assert: similarRun runs equals: runArray runs. 
+	self assert: similarRun values equals: runArray values. 
 ]
 
 { #category : #'tests - testing' }
