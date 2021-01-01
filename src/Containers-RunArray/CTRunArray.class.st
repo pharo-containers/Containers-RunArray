@@ -239,14 +239,14 @@ CTRunArray >> addLast: value [
 
 { #category : #enumerating }
 CTRunArray >> allSatisfy: aBlock [ 
-	"Only evaluate once per run"
+	"Evaluate aBlock with the elements of the receiver. If aBlock returns false for any element return false. Otherwise return true."
 
 	^ values allSatisfy: aBlock
 ]
 
 { #category : #enumerating }
 CTRunArray >> anySatisfy: aBlock [ 
-	"Only evaluate once per run"
+	"Evaluate aBlock with the elements of the receiver. If aBlock returns true for any element return true. Otherwise return false."
 
 	^ values anySatisfy: aBlock
 ]
@@ -358,6 +358,7 @@ CTRunArray >> coalesce [
 { #category : #enumerating }
 CTRunArray >> collect: aBlock [
 	"Beware, the block will be evaluated only once per group of values."
+	
 	^(self class runs: runs copy contents values: (values collect: aBlock)) coalesce
 ]
 
@@ -574,7 +575,7 @@ CTRunArray >> mapValues: mapBlock [
 
 { #category : #enumerating }
 CTRunArray >> noneSatisfy: aBlock [ 
-	"Only evaluate once per run"
+	"Evaluate aBlock with the elements of the receiver. If aBlock returns false for all elements return true. Otherwise return false"
 
 	^ values noneSatisfy: aBlock
 ]

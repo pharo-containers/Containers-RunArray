@@ -114,6 +114,35 @@ CTRunArrayTest >> testAddWithOccurrences [
 	self assert: run size equals: 9
 ]
 
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testAllSatisfy [
+	
+	self assert: (runArray allSatisfy: [ :each | each isCharacter ])
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testAllSatisfyFalse [
+	
+	runArray add: 11.
+	self deny: (runArray allSatisfy: [ :each | each isCharacter ])
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testAnySatisfy [
+	
+	self assert: (runArray anySatisfy: [ :each | each isCharacter ])
+	
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testAnySatisfyFalse [
+	
+	self deny: (runArray anySatisfy: [ :each | each isNumber ])
+	
+]
+
 { #category : #'tests - converting' }
 CTRunArrayTest >> testAsBag [
 
@@ -191,6 +220,17 @@ CTRunArrayTest >> testAtPutOutOfRangeRaiseError [
 	self should: [ runArrayNumbers at: 0 put: 5 ] raise: Error.
 	self should: [ runArrayNumbers at: 6 put: 5 ] raise: Error.
 	self should: [ runArrayNumbers at: $b put: 5 ] raise: Error
+]
+
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testCollect [
+	
+	| collectedRuns |
+	collectedRuns := (runArray collect: [ :each | each isNumber ]).
+	self assert: collectedRuns class equals: runArray class.
+	self assert: collectedRuns runs equals: #(10).
+	self assert: collectedRuns values first equals: false
+	
 ]
 
 { #category : #'tests - copying' }
@@ -311,6 +351,13 @@ CTRunArrayTest >> testCopyWithWrongFromTo [
 
 ]
 
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testCount [
+	
+	self assert: (runArray count: [ :each | each = $d ]) equals: 4.
+	self assert: (runArray count: [ :each | each = $z ]) equals: 0.
+]
+
 { #category : #'tests - iteration' }
 CTRunArrayTest >> testFillFromWith [
 	
@@ -421,12 +468,21 @@ CTRunArrayTest >> testNewWithSize [
 	1 to: 5 do: [:index | self assert: (array at: index) isNil]
 ]
 
-{ #category : #'tests - adding' }
+{ #category : #'tests - enumerating' }
+CTRunArrayTest >> testNoneSatisfy [
+	
+	self assert: (runArray noneSatisfy: [ :each | each isNumber ])
+	
+]
+
+{ #category : #'tests - removing' }
 CTRunArrayTest >> testRemoveAll [
+	"#($a $b $b $c $c $c $d $d $d $d)"
 
 	runArray removeAll.
-	self assert: runArray isEmpty.
-	self assert: runArray size equals: 0.
+	self assert: runArray runs isEmpty.
+	self assert: runArray values isEmpty
+
 ]
 
 { #category : #'tests - removing' }
