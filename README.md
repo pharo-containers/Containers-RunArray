@@ -1,5 +1,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://img.shields.io/badge/license-MIT-blue.svg)
 ![https://github.com/pharo-containers/Containers-RunArray/workflows/currentStablePharo/badge.svg](https://github.com/pharo-containers/Containers-RunArray/workflows/currentStablePharo/badge.svg)
+![https://github.com/pharo-containers/Containers-RunArray/workflows/matrix/badge.svg](https://github.com/pharo-containers/Containers-RunArray/workflows/matrix/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/pharo-containers/Containers-RunArray/badge.svg?branch=master)](https://coveralls.io/github/pharo-containers/Containers-RunArray?branch=master)
 
 # Containers-RunArray
