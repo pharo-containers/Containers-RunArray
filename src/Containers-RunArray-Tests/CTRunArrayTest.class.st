@@ -242,6 +242,39 @@ CTRunArrayTest >> testCopyFromTo [
 ]
 
 { #category : #'tests - copying' }
+CTRunArrayTest >> testCopyReplaceFromToWith [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| rArray |
+	rArray := runArray copyReplaceFrom: 2 to: 4 with: #($z $z).
+	self assert: rArray runs equals: #(1 2 2 4).
+	self assert: rArray values equals: #($a $z $c $d)
+
+]
+
+{ #category : #'tests - copying' }
+CTRunArrayTest >> testCopyUpThrough [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| rArray |
+	rArray := runArray copyUpThrough: $d.
+	self assert: rArray runs equals: runArray runs.
+	self assert: rArray values equals: runArray values
+
+]
+
+{ #category : #'tests - copying' }
+CTRunArrayTest >> testCopyUpThrough2 [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| rArray |
+	rArray := runArray copyUpThrough: $c.
+	self assert: rArray runs equals: #(1 2 3).
+	self assert: rArray values equals: #($a $b $c)
+
+]
+
+{ #category : #'tests - copying' }
 CTRunArrayTest >> testCopyWithWrongFromTo [
 	"#($a $b $b $c $c $c $d $d $d $d)"
 
