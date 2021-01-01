@@ -286,6 +286,18 @@ CTRunArrayTest >> testCopyUpTo [
 ]
 
 { #category : #'tests - copying' }
+CTRunArrayTest >> testCopyUpToLast [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| rArray rArray2 |
+	rArray := #($a $b $b $c $c $c $d $d $a $d $d)as: self classToTest.
+	rArray2 := rArray copyUpToLast: $a.
+	self assert: rArray2 runs equals: #(1 2 3 2).
+	self assert: rArray2 values equals: #($a $b $c $d)
+
+]
+
+{ #category : #'tests - copying' }
 CTRunArrayTest >> testCopyWithWrongFromTo [
 	"#($a $b $b $c $c $c $d $d $d $d)"
 

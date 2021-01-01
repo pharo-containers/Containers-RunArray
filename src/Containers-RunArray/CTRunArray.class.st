@@ -410,7 +410,7 @@ CTRunArray >> copyUpTo: anElement [
 
 { #category : #copying }
 CTRunArray >> copyUpToLast: anElement [
-	"Optimized"
+	"Answer a copy of the receiver from index 1 to the last occurrence of anElement, not including anElement."
 
 	| newValues |
 	newValues := values copyUpToLast: anElement.
