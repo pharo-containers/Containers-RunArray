@@ -194,11 +194,65 @@ CTRunArrayTest >> testAtPutOutOfRangeRaiseError [
 ]
 
 { #category : #'tests - copying' }
+CTRunArrayTest >> testConcatenate [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| rArray |
+	rArray := runArray, runArray.
+	self assert: rArray runs equals: runArray runs, runArray runs. 
+	self assert: rArray values equals: runArray values, runArray values. 
+]
+
+{ #category : #'tests - copying' }
+CTRunArrayTest >> testConcatenateWithEmpty [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| rArray |
+	rArray := self newRunArray, runArray, self newRunArray.
+	self assert: rArray runs equals: runArray runs. 
+	self assert: rArray values equals: runArray values. 
+]
+
+{ #category : #'tests - copying' }
+CTRunArrayTest >> testConcatenateWithSameEnding [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| rArray |
+	rArray := runArray, (self newRunArray add: $d; add: $d; yourself).
+	self assert: rArray runs equals: #(1 2 3 6). 
+	self assert: rArray values equals: runArray values. 
+]
+
+{ #category : #'tests - copying' }
 CTRunArrayTest >> testCopy [
 	| similarRun |
 	similarRun := runArray copy.
 	self assert: similarRun runs equals: runArray runs. 
 	self assert: similarRun values equals: runArray values. 
+]
+
+{ #category : #'tests - copying' }
+CTRunArrayTest >> testCopyFromTo [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| rArray |
+	rArray := runArray copyFrom: 2 to: 6.
+	self assert: rArray runs equals: #(2 3). 
+	self assert: rArray values equals: #($b $c)
+]
+
+{ #category : #'tests - copying' }
+CTRunArrayTest >> testCopyWithWrongFromTo [
+	"#($a $b $b $c $c $c $d $d $d $d)"
+
+	| rArray |
+	"I could not test what is happening when the start is negative
+	rArray := runArray copyFrom: -2 to: 6.
+	the result was false. should probably be for a future version of the RunArray definition"
+	
+	rArray := runArray copyFrom: 6 to: 2.
+	self assert: rArray equals: self newRunArray
+
 ]
 
 { #category : #'tests - iteration' }

@@ -365,7 +365,7 @@ CTRunArray >> collect: aBlock [
 CTRunArray >> copyFrom: start to: stop [
 
 	| newRuns run1 run2 offset1 offset2 | 
-	stop < start ifTrue: [^ CTRunArray new].
+	stop < start ifTrue: [^ self class new].
 	self at: start setRunOffsetAndValue: [:r :o :value1 | run1 := r. offset1 := o. value1].
 	self at: stop setRunOffsetAndValue: [:r :o :value2 | run2 := r. offset2 := o. value2].
 	run1 = run2
@@ -375,7 +375,7 @@ CTRunArray >> copyFrom: start to: stop [
 			[newRuns := runs copyFrom: run1 to: run2.
 			newRuns at: 1 put: (newRuns at: 1) - offset1.
 			newRuns at: newRuns size put: offset2 + 1].
-	^ CTRunArray runs: newRuns values: (values copyFrom: run1 to: run2)
+	^ self class runs: newRuns values: (values copyFrom: run1 to: run2)
 ]
 
 { #category : #copying }
